@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EventHub – College Event Management System</title>
-  <meta name="description" content="EventHub – Browse, register, and manage college events. Hackathons, workshops, cultural nights, and more." />
+  <meta name="description"
+    content="EventHub – Browse, register, and manage college events. Hackathons, workshops, cultural nights, and more." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
   <!-- ═══════ NAVIGATION ═══════ -->
   <nav id="navbar">
     <div class="nav-container">
       <a href="#" class="nav-logo" onclick="showPage('home')">
-        <span class="logo-icon">🎯</span>
+        <span class="logo-icon"></span>
         <span class="logo-text">Event<span class="logo-accent">Hub</span></span>
       </a>
       <div class="nav-links" id="navLinks">
         <a href="#" onclick="showPage('home')" class="nav-link active" data-page="home">Home</a>
         <a href="#" onclick="showPage('events')" class="nav-link" data-page="events">Events</a>
-        <a href="#" onclick="showPage('my-registrations')" class="nav-link auth-only student-only" data-page="my-registrations" style="display:none;">My Registrations</a>
-        <a href="#" onclick="showPage('admin')" class="nav-link auth-only admin-only" data-page="admin" style="display:none;">Admin Panel</a>
+        <a href="#" onclick="showPage('my-registrations')" class="nav-link auth-only student-only"
+          data-page="my-registrations" style="display:none;">My Registrations</a>
+        <a href="#" onclick="showPage('admin')" class="nav-link auth-only admin-only" data-page="admin"
+          style="display:none;">Admin Panel</a>
       </div>
       <div class="nav-actions">
         <div class="guest-actions" id="guestActions">
@@ -47,9 +53,10 @@
         <div class="hero-orb hero-orb-3"></div>
       </div>
       <div class="hero-content">
-        <div class="hero-badge">🚀 College Event Management</div>
+        <div class="hero-badge">College Event Management</div>
         <h1 class="hero-title">Discover & Join <span class="gradient-text">Amazing Events</span></h1>
-        <p class="hero-subtitle">From hackathons to cultural nights — find, register, and manage your college events all in one place.</p>
+        <p class="hero-subtitle">From hackathons to cultural nights — find, register, and manage your college events all
+          in one place.</p>
         <div class="hero-cta">
           <button class="btn btn-primary btn-lg" onclick="showPage('events')">
             Browse Events
@@ -92,32 +99,32 @@
         <p class="section-subtitle">Find events that match your interests</p>
         <div class="category-grid">
           <div class="category-card" onclick="filterByCategory('Technical')">
-            <span class="category-icon">💻</span>
+            <span class="category-icon"></span>
             <h3>Technical</h3>
             <p>Coding, robotics & tech exhibitions</p>
           </div>
           <div class="category-card" onclick="filterByCategory('Cultural')">
-            <span class="category-icon">🎭</span>
+            <span class="category-icon"></span>
             <h3>Cultural</h3>
             <p>Music, dance & art performances</p>
           </div>
           <div class="category-card" onclick="filterByCategory('Sports')">
-            <span class="category-icon">⚽</span>
+            <span class="category-icon"></span>
             <h3>Sports</h3>
             <p>Tournaments & athletic events</p>
           </div>
           <div class="category-card" onclick="filterByCategory('Workshop')">
-            <span class="category-icon">🔧</span>
+            <span class="category-icon"></span>
             <h3>Workshop</h3>
             <p>Hands‑on learning sessions</p>
           </div>
           <div class="category-card" onclick="filterByCategory('Hackathon')">
-            <span class="category-icon">🏆</span>
+            <span class="category-icon"></span>
             <h3>Hackathon</h3>
             <p>Build, innovate & compete</p>
           </div>
           <div class="category-card" onclick="filterByCategory('Seminar')">
-            <span class="category-icon">🎤</span>
+            <span class="category-icon"></span>
             <h3>Seminar</h3>
             <p>Talks, panels & discussions</p>
           </div>
@@ -134,7 +141,7 @@
         <p class="page-subtitle">Explore and register for upcoming college events</p>
         <div class="filters">
           <div class="search-box">
-            <span class="search-icon">🔍</span>
+            <span class="search-icon"></span>
             <input type="text" id="searchInput" placeholder="Search events..." oninput="applyFilters()" />
           </div>
           <select id="categoryFilter" onchange="applyFilters()" class="filter-select">
@@ -166,7 +173,8 @@
     </div>
     <div class="container">
       <div class="registrations-list" id="myRegistrationsList"></div>
-      <p class="empty-state" id="noRegistrations" style="display:none;">You haven't registered for any events yet. <a href="#" onclick="showPage('events')">Browse events →</a></p>
+      <p class="empty-state" id="noRegistrations" style="display:none;">You haven't registered for any events yet. <a
+          href="#" onclick="showPage('events')">Browse events →</a></p>
     </div>
   </section>
 
@@ -266,7 +274,8 @@
         </div>
         <button type="submit" class="btn btn-primary btn-full" id="loginBtn">Log In</button>
       </form>
-      <p class="modal-footer">Don't have an account? <a href="#" onclick="switchModal('login','register')">Sign up</a></p>
+      <p class="modal-footer">Don't have an account? <a href="#" onclick="switchModal('login','register')">Sign up</a>
+      </p>
     </div>
   </div>
 
@@ -306,7 +315,8 @@
         </div>
         <button type="submit" class="btn btn-primary btn-full" id="registerBtn">Create Account</button>
       </form>
-      <p class="modal-footer">Already have an account? <a href="#" onclick="switchModal('register','login')">Log in</a></p>
+      <p class="modal-footer">Already have an account? <a href="#" onclick="switchModal('register','login')">Log in</a>
+      </p>
     </div>
   </div>
 
@@ -326,7 +336,7 @@
     <div class="container">
       <div class="footer-content">
         <div class="footer-brand">
-          <span class="logo-icon">🎯</span>
+          <span class="logo-icon"></span>
           <span class="logo-text">Event<span class="logo-accent">Hub</span></span>
           <p>College Event Management System</p>
         </div>
@@ -340,4 +350,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>
