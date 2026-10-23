@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EventHub – College Event Management System</title>
+  <meta name="description" content="EventHub – Browse, register, and manage college events. Hackathons, workshops, cultural nights, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════ NAVIGATION ═══════ -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-logo" onclick="showPage('home')">
+        <span class="logo-icon">🎯</span>
+        <span class="logo-text">Event<span class="logo-accent">Hub</span></span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#" onclick="showPage('home')" class="nav-link active" data-page="home">Home</a>
+        <a href="#" onclick="showPage('events')" class="nav-link" data-page="events">Events</a>
+        <a href="#" onclick="showPage('my-registrations')" class="nav-link auth-only student-only" data-page="my-registrations" style="display:none;">My Registrations</a>
+        <a href="#" onclick="showPage('admin')" class="nav-link auth-only admin-only" data-page="admin" style="display:none;">Admin Panel</a>
+      </div>
+      <div class="nav-actions">
+        <div class="guest-actions" id="guestActions">
+          <button class="btn btn-ghost" onclick="showModal('login')">Log In</button>
+          <button class="btn btn-primary" onclick="showModal('register')">Sign Up</button>
+        </div>
+        <div class="user-actions" id="userActions" style="display:none;">
+          <span class="user-greeting" id="userGreeting"></span>
+          <button class="btn btn-ghost" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════ HERO SECTION (HOME PAGE) ═══════ -->
+  <section id="page-home" class="page active">
+    <div class="hero">
+      <div class="hero-bg">
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+      </div>
+      <div class="hero-content">
+        <div class="hero-badge">🚀 College Event Management</div>
+        <h1 class="hero-title">Discover & Join <span class="gradient-text">Amazing Events</span></h1>
+        <p class="hero-subtitle">From hackathons to cultural nights — find, register, and manage your college events all in one place.</p>
+        <div class="hero-cta">
+          <button class="btn btn-primary btn-lg" onclick="showPage('events')">
+            Browse Events
+            <span class="btn-arrow">→</span>
+          </button>
+          <button class="btn btn-outline btn-lg" onclick="showModal('register')">
+            Get Started
+          </button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value" id="statEvents">0</span>
+            <span class="stat-label">Active Events</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="statStudents">0</span>
+            <span class="stat-label">Students</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value" id="statRegistrations">0</span>
+            <span class="stat-label">Registrations</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured Events Carousel -->
+    <div class="section" id="featuredSection">
+      <div class="container">
+        <h2 class="section-title">Featured Events</h2>
+        <p class="section-subtitle">Don't miss out on these upcoming events</p>
+        <div class="events-grid" id="featuredEvents"></div>
+      </div>
+    </div>
+
+    <!-- Category Cards -->
+    <div class="section section-dark">
+      <div class="container">
+        <h2 class="section-title">Browse by Category</h2>
+        <p class="section-subtitle">Find events that match your interests</p>
+        <div class="category-grid">
+          <div class="category-card" onclick="filterByCategory('Technical')">
+            <span class="category-icon">💻</span>
+            <h3>Technical</h3>
+            <p>Coding, robotics & tech exhibitions</p>
+          </div>
+          <div class="category-card" onclick="filterByCategory('Cultural')">
+            <span class="category-icon">🎭</span>
+            <h3>Cultural</h3>
+            <p>Music, dance & art performances</p>
+          </div>
+          <div class="category-card" onclick="filterByCategory('Sports')">
+            <span class="category-icon">⚽</span>
+            <h3>Sports</h3>
+            <p>Tournaments & athletic events</p>
+          </div>
+          <div class="category-card" onclick="filterByCategory('Workshop')">
+            <span class="category-icon">🔧</span>
+            <h3>Workshop</h3>
+            <p>Hands‑on learning sessions</p>
+          </div>
+          <div class="category-card" onclick="filterByCategory('Hackathon')">
+            <span class="category-icon">🏆</span>
+            <h3>Hackathon</h3>
+            <p>Build, innovate & compete</p>
+          </div>
+          <div class="category-card" onclick="filterByCategory('Seminar')">
+            <span class="category-icon">🎤</span>
+            <h3>Seminar</h3>
+            <p>Talks, panels & discussions</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ EVENTS PAGE ═══════ -->
+  <section id="page-events" class="page">
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">All Events</h1>
+        <p class="page-subtitle">Explore and register for upcoming college events</p>
+        <div class="filters">
+          <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Search events..." oninput="applyFilters()" />
+          </div>
+          <select id="categoryFilter" onchange="applyFilters()" class="filter-select">
+            <option value="">All Categories</option>
+            <option value="Technical">Technical</option>
+            <option value="Cultural">Cultural</option>
+            <option value="Sports">Sports</option>
+            <option value="Workshop">Workshop</option>
+            <option value="Hackathon">Hackathon</option>
+            <option value="Seminar">Seminar</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="events-grid" id="allEventsGrid"></div>
+      <p class="empty-state" id="noEvents" style="display:none;">No events found matching your search.</p>
+    </div>
+  </section>
+
+  <!-- ═══════ MY REGISTRATIONS PAGE ═══════ -->
+  <section id="page-my-registrations" class="page">
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">My Registrations</h1>
+        <p class="page-subtitle">Events you've registered for</p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="registrations-list" id="myRegistrationsList"></div>
+      <p class="empty-state" id="noRegistrations" style="display:none;">You haven't registered for any events yet. <a href="#" onclick="showPage('events')">Browse events →</a></p>
+    </div>
+  </section>
+
+  <!-- ═══════ ADMIN PAGE ═══════ -->
+  <section id="page-admin" class="page">
+    <div class="page-header">
+      <div class="container">
+        <h1 class="page-title">Admin Panel</h1>
+        <p class="page-subtitle">Create, manage events & view participants</p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="admin-tabs">
+        <button class="tab-btn active" onclick="switchAdminTab('manage')" data-tab="manage">Manage Events</button>
+        <button class="tab-btn" onclick="switchAdminTab('create')" data-tab="create">Create Event</button>
+        <button class="tab-btn" onclick="switchAdminTab('participants')" data-tab="participants">Participants</button>
+      </div>
+
+      <!-- Manage Events Tab -->
+      <div class="admin-tab-content active" id="tab-manage">
+        <div class="admin-events-list" id="adminEventsList"></div>
+      </div>
+
+      <!-- Create Event Tab -->
+      <div class="admin-tab-content" id="tab-create">
+        <form id="createEventForm" class="form-card" onsubmit="createEvent(event)">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label for="eventTitle">Event Title</label>
+              <input type="text" id="eventTitle" required placeholder="e.g. Annual Hackathon 2026" />
+            </div>
+            <div class="form-group full-width">
+              <label for="eventDescription">Description</label>
+              <textarea id="eventDescription" required rows="4" placeholder="Describe the event..."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="eventDate">Date</label>
+              <input type="date" id="eventDate" required />
+            </div>
+            <div class="form-group">
+              <label for="eventTime">Time</label>
+              <input type="text" id="eventTime" required placeholder="e.g. 10:00 AM" />
+            </div>
+            <div class="form-group">
+              <label for="eventVenue">Venue</label>
+              <input type="text" id="eventVenue" required placeholder="e.g. Main Auditorium" />
+            </div>
+            <div class="form-group">
+              <label for="eventCategory">Category</label>
+              <select id="eventCategory" required>
+                <option value="">Select category</option>
+                <option value="Technical">Technical</option>
+                <option value="Cultural">Cultural</option>
+                <option value="Sports">Sports</option>
+                <option value="Workshop">Workshop</option>
+                <option value="Hackathon">Hackathon</option>
+                <option value="Seminar">Seminar</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="eventMaxParticipants">Max Participants</label>
+              <input type="number" id="eventMaxParticipants" required min="1" placeholder="e.g. 100" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg">Create Event</button>
+        </form>
+      </div>
+
+      <!-- Participants Tab -->
+      <div class="admin-tab-content" id="tab-participants">
+        <div class="form-group" style="max-width:400px;margin-bottom:1.5rem;">
+          <label for="participantEventSelect">Select Event</label>
+          <select id="participantEventSelect" onchange="loadParticipants()">
+            <option value="">Choose an event...</option>
+          </select>
+        </div>
+        <div id="participantsList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ LOGIN MODAL ═══════ -->
+  <div class="modal-overlay" id="modal-login" onclick="closeModalOnOverlay(event, 'login')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('login')">✕</button>
+      <h2 class="modal-title">Welcome Back</h2>
+      <p class="modal-subtitle">Log in to your EventHub account</p>
+      <form onsubmit="login(event)">
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" required placeholder="you@college.edu" />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" required placeholder="••••••••" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="loginBtn">Log In</button>
+      </form>
+      <p class="modal-footer">Don't have an account? <a href="#" onclick="switchModal('login','register')">Sign up</a></p>
+    </div>
+  </div>
+
+  <!-- ═══════ REGISTER MODAL ═══════ -->
+  <div class="modal-overlay" id="modal-register" onclick="closeModalOnOverlay(event, 'register')">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('register')">✕</button>
+      <h2 class="modal-title">Create Account</h2>
+      <p class="modal-subtitle">Join EventHub and start exploring events</p>
+      <form onsubmit="register(event)">
+        <div class="form-group">
+          <label for="regName">Full Name</label>
+          <input type="text" id="regName" required placeholder="John Doe" />
+        </div>
+        <div class="form-group">
+          <label for="regEmail">Email</label>
+          <input type="email" id="regEmail" required placeholder="you@student.college.edu" />
+        </div>
+        <div class="form-group">
+          <label for="regPassword">Password</label>
+          <input type="password" id="regPassword" required minlength="6" placeholder="Min 6 characters" />
+        </div>
+        <div class="form-group">
+          <label for="regDepartment">Department</label>
+          <input type="text" id="regDepartment" placeholder="e.g. Computer Science" />
+        </div>
+        <div class="form-group">
+          <label for="regPhone">Phone</label>
+          <input type="text" id="regPhone" placeholder="10‑digit number" />
+        </div>
+        <div class="form-group">
+          <label for="regRole">Role</label>
+          <select id="regRole">
+            <option value="student">Student</option>
+            <option value="admin">Administrator</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full" id="registerBtn">Create Account</button>
+      </form>
+      <p class="modal-footer">Already have an account? <a href="#" onclick="switchModal('register','login')">Log in</a></p>
+    </div>
+  </div>
+
+  <!-- ═══════ EVENT DETAIL MODAL ═══════ -->
+  <div class="modal-overlay" id="modal-event-detail" onclick="closeModalOnOverlay(event, 'event-detail')">
+    <div class="modal modal-lg">
+      <button class="modal-close" onclick="closeModal('event-detail')">✕</button>
+      <div id="eventDetailContent"></div>
+    </div>
+  </div>
+
+  <!-- ═══════ TOAST NOTIFICATIONS ═══════ -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ═══════ FOOTER ═══════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="logo-icon">🎯</span>
+          <span class="logo-text">Event<span class="logo-accent">Hub</span></span>
+          <p>College Event Management System</p>
+        </div>
+        <div class="footer-info">
+          <p>Built with Node.js, Express, MongoDB & Mongoose</p>
+          <p>&copy; 2026 EventHub. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
